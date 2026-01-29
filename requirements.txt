@@ -1,14 +1,33 @@
-# Core cryptography dependencies
-cryptography>=41.0.0
-argon2-cffi>=21.3.0
-pycryptodome>=3.19.0
+# ═══════════════════════════════════════════════════════════════════
+# Fractured Key - Dependencies
+# Install with: pip install -r requirements.txt
+# ═══════════════════════════════════════════════════════════════════
 
-# Image processing
-Pillow>=10.0.0
+# ─────────────────────────────────────────────────────────────────────
+# Core Cryptography
+# ─────────────────────────────────────────────────────────────────────
+cryptography>=41.0.0          # AES-GCM encryption, AESGCM cipher
+argon2-cffi>=21.3.0           # Argon2id key derivation
+pycryptodome>=3.19.0          # Shamir Secret Sharing (SSS)
 
-# GUI and styling
-colorama>=0.4.6
-customtkinter>=5.2.0
+# ─────────────────────────────────────────────────────────────────────
+# Image Processing & Steganography
+# ─────────────────────────────────────────────────────────────────────
+Pillow>=10.0.0                # Image manipulation for LSB steganography
 
-# Development and testing
-pytest>=7.4.0
+# ─────────────────────────────────────────────────────────────────────
+# Modern GUI (CustomTkinter)
+# ─────────────────────────────────────────────────────────────────────
+customtkinter>=5.2.0          # Modern themed tkinter widgets
+darkdetect>=0.8.0             # OS dark/light mode detection (customtkinter dependency)
+packaging>=21.0               # Version parsing (customtkinter dependency)
+
+# ─────────────────────────────────────────────────────────────────────
+# CLI Styling
+# ─────────────────────────────────────────────────────────────────────
+colorama>=0.4.6               # Colored terminal output (Windows support)
+
+# ─────────────────────────────────────────────────────────────────────
+# Development & Testing (optional)
+# ─────────────────────────────────────────────────────────────────────
+pytest>=7.4.0                 # Testing framework
