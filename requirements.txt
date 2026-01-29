@@ -1,0 +1,14 @@
+# Core cryptography dependencies
+cryptography>=41.0.0
+argon2-cffi>=21.3.0
+pycryptodome>=3.19.0
+
+# Image processing
+Pillow>=10.0.0
+
+# GUI and styling
+colorama>=0.4.6
+customtkinter>=5.2.0
+
+# Development and testing
+pytest>=7.4.0
