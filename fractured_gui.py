@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Fractured Key - Premium Modern GUI
-A sleek, mysterious, and tech-inspired password manager interface
-Designed with 2024-2025 UI/UX trends
+A next-generation secure authentication system with a 2025 SaaS-style interface.
+Blue theme with glassmorphism, smooth animations, and premium typography.
 """
 
 import customtkinter as ctk
@@ -21,109 +21,114 @@ from sss import split_bytes_into_shares, recover_bytes_from_shares
 from crypto import encrypt_password_aes_gcm, decrypt_password_aes_gcm
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# COLOR SCHEME - "Fractured Key" Theme
-# A dark, mysterious palette with cyan/teal accents
+# COLOR SCHEME - Attractive light blue (sky / cyan) theme
+# Futuristic, secure, premium SaaS 2025
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class Colors:
-    # Primary backgrounds (dark, layered)
-    BG_DARKEST = "#0A0E14"      # Deepest background
-    BG_DARK = "#0D1117"          # Main background
-    BG_MEDIUM = "#161B22"        # Card background
-    BG_LIGHT = "#1C2128"         # Elevated surfaces
-    BG_HOVER = "#21262D"         # Hover state
-    
-    # Accent colors (mysterious cyan/teal)
-    ACCENT_PRIMARY = "#00D9FF"   # Primary cyan
-    ACCENT_GLOW = "#00B4D8"      # Glow effect
-    ACCENT_MUTED = "#0891B2"     # Muted accent
-    ACCENT_DARK = "#065F73"      # Dark accent
-    
+    # Primary backgrounds (dark base for contrast)
+    BG_DARKEST = "#050B14"
+    BG_DARK = "#0A1628"
+    BG_MEDIUM = "#0F172A"
+    BG_LIGHT = "#1E293B"
+    BG_HOVER = "#334155"
+
+    # Light blue accents (attractive sky / cyan)
+    BLUE_DEEP = "#0C4A6E"        # Dark teal-blue (top bar, depth)
+    BLUE_NEON = "#38BDF8"        # Light sky blue (primary accent)
+    BLUE_SKY = "#22D3EE"         # Cyan
+    BLUE_LIGHT = "#7DD3FC"       # Light sky
+    BLUE_GLOW = "#BAE6FD"        # Soft glow / hover
+
+    # Primary accent — attractive light blue
+    ACCENT_PRIMARY = "#38BDF8"   # Light sky blue
+    ACCENT_GLOW = "#7DD3FC"      # Lighter on hover
+    ACCENT_MUTED = "#0EA5E9"     # Sky blue
+    ACCENT_DARK = "#0284C7"      # Deeper for contrast
+
     # Semantic colors
-    SUCCESS = "#10B981"          # Emerald green
+    SUCCESS = "#10B981"
     SUCCESS_GLOW = "#059669"
-    WARNING = "#F59E0B"          # Amber
-    ERROR = "#EF4444"            # Red
+    WARNING = "#F59E0B"
+    ERROR = "#EF4444"
     ERROR_GLOW = "#DC2626"
-    
+
     # Text colors
-    TEXT_PRIMARY = "#F0F6FC"     # Primary text
-    TEXT_SECONDARY = "#8B949E"   # Secondary text
-    TEXT_MUTED = "#6E7681"       # Muted text
-    TEXT_ACCENT = "#00D9FF"      # Accent text
-    
+    TEXT_PRIMARY = "#F8FAFC"
+    TEXT_SECONDARY = "#94A3B8"
+    TEXT_MUTED = "#64748B"
+    TEXT_ACCENT = "#7DD3FC"
+
     # Border and dividers
-    BORDER = "#30363D"           # Standard border
-    BORDER_GLOW = "#00D9FF33"    # Glowing border (with alpha)
-    
-    # Gradients (for reference)
-    GRADIENT_START = "#0D1117"
-    GRADIENT_END = "#161B22"
+    BORDER = "#334155"
+    BORDER_GLOW = "#38BDF840"
+    BORDER_LIGHT = "#475569"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# TYPOGRAPHY
-# Modern, clean fonts with good hierarchy
+# TYPOGRAPHY - Inter, Poppins, Segoe UI, Roboto
 # ═══════════════════════════════════════════════════════════════════════════════
+
+# Use Segoe UI (Windows). For Inter/Poppins/Roboto, set to "Inter" or "Poppins" if installed.
+_FONT_FAMILY = "Segoe UI"
 
 class Fonts:
-    # Font family - Using system fonts that look modern
-    # Fallback chain: Segoe UI (Windows) > SF Pro (Mac) > Ubuntu (Linux)
-    FAMILY = "Segoe UI"
+    FAMILY = _FONT_FAMILY
     FAMILY_MONO = "Cascadia Code"
-    
-    # Font sizes
-    TITLE_XL = ("Segoe UI", 32, "bold")
-    TITLE_LG = ("Segoe UI", 24, "bold")
-    TITLE_MD = ("Segoe UI", 18, "bold")
-    TITLE_SM = ("Segoe UI", 14, "bold")
-    
-    BODY_LG = ("Segoe UI", 14)
-    BODY_MD = ("Segoe UI", 12)
-    BODY_SM = ("Segoe UI", 11)
-    
+
+    HERO = (_FONT_FAMILY, 48, "bold")
+    HERO_SM = (_FONT_FAMILY, 36, "bold")
+    TITLE_XL = (_FONT_FAMILY, 28, "bold")
+    TITLE_LG = (_FONT_FAMILY, 22, "bold")
+    TITLE_MD = (_FONT_FAMILY, 18, "bold")
+    TITLE_SM = (_FONT_FAMILY, 14, "bold")
+
+    BODY_LG = (_FONT_FAMILY, 14)
+    BODY_MD = (_FONT_FAMILY, 12)
+    BODY_SM = (_FONT_FAMILY, 11)
+
     MONO_LG = ("Cascadia Code", 12)
     MONO_MD = ("Cascadia Code", 11)
     MONO_SM = ("Cascadia Code", 10)
-    
-    BUTTON = ("Segoe UI", 13, "bold")
-    LABEL = ("Segoe UI", 12, "bold")
-    CAPTION = ("Segoe UI", 10)
+
+    BUTTON = (_FONT_FAMILY, 13, "bold")
+    LABEL = (_FONT_FAMILY, 12, "bold")
+    CAPTION = (_FONT_FAMILY, 10)
+    TAGLINE = (_FONT_FAMILY, 16)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# CUSTOM WIDGETS
-# Modern, stylized UI components
+# CUSTOM WIDGETS - Glassmorphism, neumorphism, micro-interactions
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class GlowingCard(ctk.CTkFrame):
-    """A card with subtle glow effect on hover"""
+    """Glassmorphism-style card with soft shadow and hover glow"""
     def __init__(self, master, **kwargs):
         super().__init__(
             master,
             fg_color=Colors.BG_MEDIUM,
-            corner_radius=16,
+            corner_radius=20,
             border_width=1,
             border_color=Colors.BORDER,
             **kwargs
         )
         self.bind("<Enter>", self._on_enter)
         self.bind("<Leave>", self._on_leave)
-        
+
     def _on_enter(self, event):
-        self.configure(border_color=Colors.ACCENT_DARK)
-        
+        self.configure(border_color=Colors.BLUE_NEON)
+
     def _on_leave(self, event):
         self.configure(border_color=Colors.BORDER)
 
 
 class AccentButton(ctk.CTkButton):
-    """Primary action button with glow effect"""
-    def __init__(self, master, height=48, **kwargs):
+    """Primary CTA - neon blue gradient feel"""
+    def __init__(self, master, height=52, **kwargs):
         super().__init__(
             master,
             fg_color=Colors.ACCENT_PRIMARY,
-            hover_color=Colors.ACCENT_GLOW,
-            text_color=Colors.BG_DARKEST,
-            corner_radius=12,
+            hover_color=Colors.BLUE_GLOW,
+            text_color="#FFFFFF",
+            corner_radius=14,
             height=height,
             font=Fonts.BUTTON,
             **kwargs
@@ -131,16 +136,16 @@ class AccentButton(ctk.CTkButton):
 
 
 class SecondaryButton(ctk.CTkButton):
-    """Secondary action button"""
-    def __init__(self, master, height=44, **kwargs):
+    """Secondary / outline button"""
+    def __init__(self, master, height=48, **kwargs):
         super().__init__(
             master,
-            fg_color=Colors.BG_LIGHT,
+            fg_color="transparent",
             hover_color=Colors.BG_HOVER,
             text_color=Colors.TEXT_PRIMARY,
-            border_width=1,
-            border_color=Colors.BORDER,
-            corner_radius=12,
+            border_width=2,
+            border_color=Colors.BORDER_LIGHT,
+            corner_radius=14,
             height=height,
             font=Fonts.BODY_MD,
             **kwargs
@@ -154,8 +159,8 @@ class SuccessButton(ctk.CTkButton):
             master,
             fg_color=Colors.SUCCESS,
             hover_color=Colors.SUCCESS_GLOW,
-            text_color=Colors.TEXT_PRIMARY,
-            corner_radius=12,
+            text_color="#FFFFFF",
+            corner_radius=14,
             height=height,
             font=Fonts.BUTTON,
             **kwargs
@@ -164,13 +169,13 @@ class SuccessButton(ctk.CTkButton):
 
 class DangerButton(ctk.CTkButton):
     """Danger/destructive action button"""
-    def __init__(self, master, height=44, **kwargs):
+    def __init__(self, master, height=48, **kwargs):
         super().__init__(
             master,
             fg_color=Colors.ERROR,
             hover_color=Colors.ERROR_GLOW,
-            text_color=Colors.TEXT_PRIMARY,
-            corner_radius=12,
+            text_color="#FFFFFF",
+            corner_radius=14,
             height=height,
             font=Fonts.BODY_MD,
             **kwargs
@@ -178,14 +183,14 @@ class DangerButton(ctk.CTkButton):
 
 
 class ModernEntry(ctk.CTkEntry):
-    """Styled text entry with focus animation"""
+    """Styled entry with focus glow (blue)"""
     def __init__(self, master, placeholder="", is_password=False, height=48, **kwargs):
         super().__init__(
             master,
             fg_color=Colors.BG_LIGHT,
             border_color=Colors.BORDER,
             border_width=2,
-            corner_radius=10,
+            corner_radius=12,
             height=height,
             placeholder_text=placeholder,
             placeholder_text_color=Colors.TEXT_MUTED,
@@ -196,10 +201,10 @@ class ModernEntry(ctk.CTkEntry):
         )
         self.bind("<FocusIn>", self._on_focus)
         self.bind("<FocusOut>", self._on_unfocus)
-        
+
     def _on_focus(self, event):
         self.configure(border_color=Colors.ACCENT_PRIMARY)
-        
+
     def _on_unfocus(self, event):
         self.configure(border_color=Colors.BORDER)
 
@@ -212,7 +217,7 @@ class ModernTextbox(ctk.CTkTextbox):
             fg_color=Colors.BG_DARKEST,
             border_color=Colors.BORDER,
             border_width=1,
-            corner_radius=10,
+            corner_radius=12,
             text_color=Colors.TEXT_PRIMARY,
             font=Fonts.MONO_MD,
             scrollbar_button_color=Colors.BG_LIGHT,
@@ -222,24 +227,23 @@ class ModernTextbox(ctk.CTkTextbox):
 
 
 class AnimatedProgress(ctk.CTkProgressBar):
-    """Animated progress bar"""
+    """Progress bar with blue accent"""
     def __init__(self, master, **kwargs):
         super().__init__(
             master,
             fg_color=Colors.BG_LIGHT,
             progress_color=Colors.ACCENT_PRIMARY,
             corner_radius=8,
-            height=6,
+            height=8,
             **kwargs
         )
         self._animating = False
-        self._animation_pos = 0
-        
+
     def start_animation(self):
         self._animating = True
         self.configure(mode="indeterminate")
         self.start()
-        
+
     def stop_animation(self):
         self._animating = False
         self.stop()
@@ -254,158 +258,377 @@ class AnimatedProgress(ctk.CTkProgressBar):
 class FracturedKeyApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        
-        # Configure appearance
+
         ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("dark-blue")
-        
-        # Window setup
+        ctk.set_default_color_theme("blue")
+
         self.title("Fractured Key")
         self.geometry("1200x800")
         self.minsize(1000, 700)
         self.configure(fg_color=Colors.BG_DARK)
-        
-        # Center window
+
         self.update_idletasks()
         x = (self.winfo_screenwidth() // 2) - (1200 // 2)
         y = (self.winfo_screenheight() // 2) - (800 // 2)
         self.geometry(f"1200x800+{x}+{y}")
-        
-        # State variables
+
         self.selected_images = []
         self.current_tab = "encrypt"
-        
-        # Create UI
+        self._show_landing = True
+
+        # Root stack: landing page OR main app
+        self.root_stack = ctk.CTkFrame(self, fg_color="transparent")
+        self.root_stack.pack(fill="both", expand=True)
+
+        # Landing page (shown first)
+        self._create_landing_page()
+        self.landing_frame.pack(fill="both", expand=True)
+
+        # Main app container (header + sidebar + content + status)
+        self.main_container = ctk.CTkFrame(self.root_stack, fg_color="transparent")
+        # Don't pack yet — user must click Get Started / Login / Explore Features
+
         self._create_layout()
         self._create_header()
         self._create_sidebar()
         self._create_main_content()
         self._create_status_bar()
-        
-        # Show encrypt tab by default
+
         self._show_tab("encrypt")
-        
-    def _create_layout(self):
-        """Create the main layout structure"""
-        # Main container
-        self.main_container = ctk.CTkFrame(self, fg_color="transparent")
+
+    def _create_landing_page(self):
+        """Attractive, interactive Introduction / Landing Page"""
+        self.landing_frame = ctk.CTkFrame(
+            self.root_stack,
+            fg_color=Colors.BG_DARK,
+            corner_radius=0
+        )
+
+        # Top accent strip (light blue theme)
+        top_bar = ctk.CTkFrame(
+            self.landing_frame,
+            fg_color=Colors.ACCENT_MUTED,
+            height=8,
+            corner_radius=0
+        )
+        top_bar.pack(fill="x")
+        top_bar.pack_propagate(False)
+
+        inner = ctk.CTkScrollableFrame(
+            self.landing_frame,
+            fg_color="transparent",
+            scrollbar_button_color=Colors.BG_LIGHT,
+            scrollbar_button_hover_color=Colors.BG_HOVER
+        )
+        inner.pack(fill="both", expand=True, padx=48, pady=40)
+
+        # Widgets revealed with animation (do not pack yet)
+        self._landing_reveal = []
+
+        # Hero section — wrapped in a soft card for depth and focus
+        hero_card = GlowingCard(inner)
+        hero_card_inner = ctk.CTkFrame(hero_card, fg_color="transparent")
+        hero_card_inner.pack(fill="x", padx=40, pady=36)
+
+        # Large hero title
+        hero_label = ctk.CTkLabel(
+            hero_card_inner,
+            text="Fractured Key",
+            font=Fonts.HERO,
+            text_color=Colors.TEXT_PRIMARY
+        )
+        hero_label.pack(anchor="center", pady=(0, 14))
+
+        # Accent line (light blue)
+        underline = ctk.CTkFrame(
+            hero_card_inner,
+            fg_color=Colors.ACCENT_PRIMARY,
+            height=4,
+            width=140,
+            corner_radius=2
+        )
+        underline.pack(anchor="center", pady=(0, 18))
+
+        # Tagline — more prominent
+        tagline = ctk.CTkLabel(
+            hero_card_inner,
+            text="A next-generation secure authentication system",
+            font=Fonts.TAGLINE,
+            text_color=Colors.TEXT_ACCENT
+        )
+        tagline.pack(anchor="center", pady=(0, 20))
+
+        # Short engaging description
+        desc_text = (
+            "Split your secrets across multiple carriers. Military-grade encryption, "
+            "Shamir Secret Sharing, and steganography — your credentials are never in one place. "
+            "Recover only when you have enough fragments and your master password."
+        )
+        desc = ctk.CTkLabel(
+            hero_card_inner,
+            text=desc_text,
+            font=Fonts.BODY_LG,
+            text_color=Colors.TEXT_SECONDARY,
+            wraplength=640,
+            justify="center"
+        )
+        desc.pack(anchor="center", pady=(0, 12))
+
+        # Bullet highlights (inline, interactive feel)
+        bullets = ctk.CTkLabel(
+            hero_card_inner,
+            text="AES-256-GCM  ·  Argon2id  ·  LSB steganography  ·  Offline-first",
+            font=Fonts.BODY_SM,
+            text_color=Colors.TEXT_MUTED
+        )
+        bullets.pack(anchor="center", pady=(0, 28))
+
+        # CTA buttons — Get Started (primary), Explore Features (secondary). No Login.
+        cta_frame = ctk.CTkFrame(hero_card_inner, fg_color="transparent")
+        cta_frame.pack(anchor="center", pady=(0, 8))
+
+        btn_get_started = AccentButton(
+            cta_frame,
+            text="  Get Started  ",
+            command=lambda: self._enter_app("encrypt"),
+            height=54,
+            width=200
+        )
+        btn_get_started.pack(side="left", padx=12)
+
+        btn_explore = SecondaryButton(
+            cta_frame,
+            text="  Explore Features  ",
+            command=lambda: self._enter_app("about"),
+            height=50,
+            width=200
+        )
+        btn_explore.pack(side="left", padx=12)
+
+        # Section divider with label (no pack — animated)
+        section_label = ctk.CTkLabel(
+            inner,
+            text="Why Fractured Key",
+            font=Fonts.TITLE_MD,
+            text_color=Colors.TEXT_PRIMARY
+        )
+
+        hint = ctk.CTkLabel(
+            inner,
+            text="Scroll to explore features",
+            font=Fonts.CAPTION,
+            text_color=Colors.TEXT_MUTED
+        )
+
+        # Feature cards — more attractive layout with consistent hover (GlowingCard)
+        features_container = ctk.CTkFrame(inner, fg_color="transparent")
+
+        features = [
+            ("🔒", "Military-grade encryption", "AES-256-GCM + Argon2id key derivation"),
+            ("🔀", "Fragmented secrets", "Shamir Secret Sharing — partial fragments recover the whole"),
+            ("🖼️", "Hidden in plain sight", "LSB steganography embeds data inside images"),
+            ("📴", "Offline-first", "No cloud dependency; everything stays on your device"),
+            ("🛡️", "Recovery by design", "Only enough fragments + master password to decrypt"),
+        ]
+
+        for icon, title, desc in features:
+            card = GlowingCard(features_container)
+            card.pack(fill="x", pady=10, padx=16)
+            card_inner = ctk.CTkFrame(card, fg_color="transparent")
+            card_inner.pack(fill="x", padx=28, pady=22)
+            icon_lbl = ctk.CTkLabel(
+                card_inner,
+                text=icon,
+                font=("Segoe UI Emoji", 30),
+                text_color=Colors.ACCENT_PRIMARY
+            )
+            icon_lbl.pack(anchor="w", pady=(0, 12))
+            ctk.CTkLabel(
+                card_inner,
+                text=title,
+                font=Fonts.TITLE_SM,
+                text_color=Colors.TEXT_PRIMARY
+            ).pack(anchor="w", pady=(0, 6))
+            ctk.CTkLabel(
+                card_inner,
+                text=desc,
+                font=Fonts.BODY_SM,
+                text_color=Colors.TEXT_MUTED,
+                wraplength=560,
+                justify="left"
+            ).pack(anchor="w")
+
+        # Footer (no pack — animated)
+        footer = ctk.CTkLabel(
+            inner,
+            text="Secure · Offline · Portfolio-ready",
+            font=Fonts.CAPTION,
+            text_color=Colors.TEXT_MUTED
+        )
+
+        # Staggered reveal animation: pack widgets in sequence
+        self._landing_reveal = [
+            (hero_card, {"fill": "x", "pady": (24, 32), "padx": 24}),
+            (section_label, {"anchor": "center", "pady": (36, 8)}),
+            (hint, {"anchor": "center", "pady": (0, 20)}),
+            (features_container, {"fill": "x", "pady": (0, 28)}),
+            (footer, {"anchor": "center", "pady": (24, 28)}),
+        ]
+        self.after(180, lambda: self._reveal_next_landing(0))
+
+    def _reveal_next_landing(self, i):
+        """Reveal next landing section (staggered animation)."""
+        if i < len(self._landing_reveal):
+            widget, kwargs = self._landing_reveal[i]
+            widget.pack(**kwargs)
+            self.after(130, lambda: self._reveal_next_landing(i + 1))
+
+    def _enter_app(self, tab_id="encrypt"):
+        """Switch from landing page to main app and optionally open a tab."""
+        if not self._show_landing:
+            return
+        self._show_landing = False
+        self.landing_frame.pack_forget()
         self.main_container.pack(fill="both", expand=True)
-        
-        # Configure grid
+        self._show_tab(tab_id)
+
+    def _show_landing_page(self):
+        """Return from main app to the Introduction / Landing page and replay animation."""
+        if self._show_landing:
+            return
+        self._show_landing = True
+        self.main_container.pack_forget()
+        self.landing_frame.pack(fill="both", expand=True)
+        # Unpack sections so staggered reveal animation runs again
+        for widget, _ in self._landing_reveal:
+            try:
+                widget.pack_forget()
+            except Exception:
+                pass
+        self.after(120, lambda: self._reveal_next_landing(0))
+
+    def _create_layout(self):
+        """Main app layout structure"""
         self.main_container.grid_columnconfigure(1, weight=1)
         self.main_container.grid_rowconfigure(1, weight=1)
         
     def _create_header(self):
-        """Create the app header"""
+        """Create the app header - premium blue theme"""
         header = ctk.CTkFrame(
-            self.main_container, 
+            self.main_container,
             fg_color=Colors.BG_DARKEST,
-            height=80,
-            corner_radius=0
+            height=72,
+            corner_radius=0,
+            border_width=0
         )
         header.grid(row=0, column=0, columnspan=2, sticky="ew")
         header.grid_propagate(False)
-        
-        # Logo and title container
+
         title_frame = ctk.CTkFrame(header, fg_color="transparent")
-        title_frame.pack(side="left", padx=30, pady=15)
-        
-        # Key icon (using unicode)
+        title_frame.pack(side="left", padx=28, pady=14)
+
         icon_label = ctk.CTkLabel(
             title_frame,
             text="🔐",
-            font=("Segoe UI Emoji", 32),
+            font=("Segoe UI Emoji", 28),
             text_color=Colors.ACCENT_PRIMARY
         )
-        icon_label.pack(side="left", padx=(0, 15))
-        
-        # Title text
+        icon_label.pack(side="left", padx=(0, 14))
+
         title_text = ctk.CTkFrame(title_frame, fg_color="transparent")
         title_text.pack(side="left")
-        
+
         ctk.CTkLabel(
             title_text,
-            text="FRACTURED KEY",
+            text="Fractured Key",
             font=Fonts.TITLE_LG,
             text_color=Colors.TEXT_PRIMARY
         ).pack(anchor="w")
-        
+
         ctk.CTkLabel(
             title_text,
-            text="Steganographic Password Vault",
-            font=Fonts.BODY_SM,
+            text="Secure authentication · Steganographic vault",
+            font=Fonts.CAPTION,
             text_color=Colors.TEXT_MUTED
         ).pack(anchor="w")
-        
-        # Version badge
+
+        # Right side: Back to Introduction + version
+        header_right = ctk.CTkFrame(header, fg_color="transparent")
+        header_right.pack(side="right", padx=28, pady=14)
+
+        btn_intro = SecondaryButton(
+            header_right,
+            text="  Back to Introduction  ",
+            command=self._show_landing_page,
+            height=40,
+            width=180
+        )
+        btn_intro.pack(side="left", padx=(0, 12))
+
         version_badge = ctk.CTkLabel(
-            header,
-            text="v2.0",
+            header_right,
+            text=" v2.0 ",
             font=Fonts.CAPTION,
             text_color=Colors.TEXT_MUTED,
             fg_color=Colors.BG_LIGHT,
-            corner_radius=6,
-            padx=10,
-            pady=4
+            corner_radius=8,
+            padx=12,
+            pady=5
         )
-        version_badge.pack(side="right", padx=30)
+        version_badge.pack(side="left")
         
     def _create_sidebar(self):
-        """Create the navigation sidebar"""
+        """Create the navigation sidebar - clean, modern"""
         sidebar = ctk.CTkFrame(
             self.main_container,
             fg_color=Colors.BG_DARKEST,
-            width=240,
-            corner_radius=0
+            width=260,
+            corner_radius=0,
+            border_width=0
         )
         sidebar.grid(row=1, column=0, sticky="nsew")
         sidebar.grid_propagate(False)
-        
-        # Navigation buttons
+
         nav_frame = ctk.CTkFrame(sidebar, fg_color="transparent")
-        nav_frame.pack(fill="x", pady=20, padx=15)
-        
-        # Navigation items
+        nav_frame.pack(fill="x", pady=24, padx=16)
+
         nav_items = [
             ("encrypt", "🔒", "Encrypt", "Hide your secrets"),
             ("decrypt", "🔓", "Decrypt", "Reveal your secrets"),
             ("manual", "📁", "Manual", "Direct file decrypt"),
             ("about", "ℹ️", "About", "Learn more"),
         ]
-        
+
         self.nav_buttons = {}
-        
+
         for tab_id, icon, title, subtitle in nav_items:
             btn_frame = ctk.CTkFrame(
-                nav_frame, 
+                nav_frame,
                 fg_color="transparent",
+                corner_radius=12,
                 cursor="hand2"
             )
-            btn_frame.pack(fill="x", pady=4)
-            
-            # Make the entire frame clickable
+            btn_frame.pack(fill="x", pady=6)
+
             btn_frame.bind("<Button-1>", lambda e, t=tab_id: self._show_tab(t))
-            
-            # Inner content
+
             content = ctk.CTkFrame(btn_frame, fg_color="transparent")
-            content.pack(fill="x", padx=12, pady=10)
+            content.pack(fill="x", padx=14, pady=12)
             content.bind("<Button-1>", lambda e, t=tab_id: self._show_tab(t))
-            
-            # Icon
+
             icon_lbl = ctk.CTkLabel(
                 content,
                 text=icon,
                 font=("Segoe UI Emoji", 20),
                 text_color=Colors.TEXT_SECONDARY
             )
-            icon_lbl.pack(side="left", padx=(0, 12))
+            icon_lbl.pack(side="left", padx=(0, 14))
             icon_lbl.bind("<Button-1>", lambda e, t=tab_id: self._show_tab(t))
-            
-            # Text container
+
             text_container = ctk.CTkFrame(content, fg_color="transparent")
             text_container.pack(side="left", fill="x", expand=True)
             text_container.bind("<Button-1>", lambda e, t=tab_id: self._show_tab(t))
-            
+
             title_lbl = ctk.CTkLabel(
                 text_container,
                 text=title,
@@ -415,7 +638,7 @@ class FracturedKeyApp(ctk.CTk):
             )
             title_lbl.pack(anchor="w")
             title_lbl.bind("<Button-1>", lambda e, t=tab_id: self._show_tab(t))
-            
+
             subtitle_lbl = ctk.CTkLabel(
                 text_container,
                 text=subtitle,
@@ -425,62 +648,56 @@ class FracturedKeyApp(ctk.CTk):
             )
             subtitle_lbl.pack(anchor="w")
             subtitle_lbl.bind("<Button-1>", lambda e, t=tab_id: self._show_tab(t))
-            
+
             self.nav_buttons[tab_id] = {
                 "frame": btn_frame,
                 "icon": icon_lbl,
                 "title": title_lbl,
                 "subtitle": subtitle_lbl
             }
-            
-            # Hover effects
+
             def on_enter(e, f=btn_frame, t=tab_id):
                 if self.current_tab != t:
                     f.configure(fg_color=Colors.BG_HOVER)
+
             def on_leave(e, f=btn_frame, t=tab_id):
                 if self.current_tab != t:
                     f.configure(fg_color="transparent")
-                    
+
             btn_frame.bind("<Enter>", on_enter)
             btn_frame.bind("<Leave>", on_leave)
-            
-        # Divider
-        divider = ctk.CTkFrame(
-            sidebar,
-            fg_color=Colors.BORDER,
-            height=1
-        )
-        divider.pack(fill="x", padx=15, pady=20)
-        
-        # Security info
+
+        divider = ctk.CTkFrame(sidebar, fg_color=Colors.BORDER, height=1)
+        divider.pack(fill="x", padx=16, pady=24)
+
         security_frame = ctk.CTkFrame(sidebar, fg_color="transparent")
-        security_frame.pack(fill="x", padx=15, pady=10)
-        
+        security_frame.pack(fill="x", padx=16, pady=12)
+
         ctk.CTkLabel(
             security_frame,
             text="🛡️ Security",
             font=Fonts.LABEL,
             text_color=Colors.TEXT_SECONDARY
-        ).pack(anchor="w", pady=(0, 8))
-        
+        ).pack(anchor="w", pady=(0, 10))
+
         security_items = [
             "AES-256-GCM Encryption",
             "Argon2id Key Derivation",
             "Shamir Secret Sharing",
             "LSB Steganography"
         ]
-        
+
         for item in security_items:
             item_frame = ctk.CTkFrame(security_frame, fg_color="transparent")
-            item_frame.pack(fill="x", pady=2)
-            
+            item_frame.pack(fill="x", pady=4)
+
             ctk.CTkLabel(
                 item_frame,
                 text="•",
                 font=Fonts.BODY_SM,
-                text_color=Colors.ACCENT_MUTED
-            ).pack(side="left", padx=(0, 8))
-            
+                text_color=Colors.BLUE_GLOW
+            ).pack(side="left", padx=(0, 10))
+
             ctk.CTkLabel(
                 item_frame,
                 text=item,
@@ -514,9 +731,9 @@ class FracturedKeyApp(ctk.CTk):
             scrollbar_button_hover_color=Colors.BG_HOVER
         )
         
-        # Page title
+        # Page title - consistent spacing
         header_frame = ctk.CTkFrame(tab, fg_color="transparent")
-        header_frame.pack(fill="x", padx=40, pady=(30, 20))
+        header_frame.pack(fill="x", padx=44, pady=(36, 24))
         
         ctk.CTkLabel(
             header_frame,
@@ -530,11 +747,10 @@ class FracturedKeyApp(ctk.CTk):
             text="Secure your password using military-grade encryption and steganography",
             font=Fonts.BODY_MD,
             text_color=Colors.TEXT_SECONDARY
-        ).pack(anchor="w", pady=(5, 0))
+        ).pack(anchor="w", pady=(8, 0))
         
-        # Main content grid
         content = ctk.CTkFrame(tab, fg_color="transparent")
-        content.pack(fill="both", expand=True, padx=40, pady=(0, 30))
+        content.pack(fill="both", expand=True, padx=44, pady=(0, 36))
         
         # Password input card
         password_card = GlowingCard(content)
@@ -677,9 +893,8 @@ class FracturedKeyApp(ctk.CTk):
             scrollbar_button_hover_color=Colors.BG_HOVER
         )
         
-        # Page title
         header_frame = ctk.CTkFrame(tab, fg_color="transparent")
-        header_frame.pack(fill="x", padx=40, pady=(30, 20))
+        header_frame.pack(fill="x", padx=44, pady=(36, 24))
         
         ctk.CTkLabel(
             header_frame,
@@ -693,11 +908,10 @@ class FracturedKeyApp(ctk.CTk):
             text="Recover your password from steganographic images",
             font=Fonts.BODY_MD,
             text_color=Colors.TEXT_SECONDARY
-        ).pack(anchor="w", pady=(5, 0))
+        ).pack(anchor="w", pady=(8, 0))
         
-        # Main content
         content = ctk.CTkFrame(tab, fg_color="transparent")
-        content.pack(fill="both", expand=True, padx=40, pady=(0, 30))
+        content.pack(fill="both", expand=True, padx=44, pady=(0, 36))
         
         # Instructions card
         instructions_card = GlowingCard(content)
@@ -876,9 +1090,8 @@ class FracturedKeyApp(ctk.CTk):
             scrollbar_button_hover_color=Colors.BG_HOVER
         )
         
-        # Page title
         header_frame = ctk.CTkFrame(tab, fg_color="transparent")
-        header_frame.pack(fill="x", padx=40, pady=(30, 20))
+        header_frame.pack(fill="x", padx=44, pady=(36, 24))
         
         ctk.CTkLabel(
             header_frame,
@@ -892,11 +1105,10 @@ class FracturedKeyApp(ctk.CTk):
             text="Decrypt .bin files directly without steganography",
             font=Fonts.BODY_MD,
             text_color=Colors.TEXT_SECONDARY
-        ).pack(anchor="w", pady=(5, 0))
+        ).pack(anchor="w", pady=(8, 0))
         
-        # Main content
         content = ctk.CTkFrame(tab, fg_color="transparent")
-        content.pack(fill="both", expand=True, padx=40, pady=(0, 30))
+        content.pack(fill="both", expand=True, padx=44, pady=(0, 36))
         
         # File selection card
         file_card = GlowingCard(content)
@@ -1005,9 +1217,8 @@ class FracturedKeyApp(ctk.CTk):
             scrollbar_button_hover_color=Colors.BG_HOVER
         )
         
-        # Page title
         header_frame = ctk.CTkFrame(tab, fg_color="transparent")
-        header_frame.pack(fill="x", padx=40, pady=(30, 20))
+        header_frame.pack(fill="x", padx=44, pady=(36, 24))
         
         ctk.CTkLabel(
             header_frame,
@@ -1016,9 +1227,8 @@ class FracturedKeyApp(ctk.CTk):
             text_color=Colors.TEXT_PRIMARY
         ).pack(anchor="w")
         
-        # Main content
         content = ctk.CTkFrame(tab, fg_color="transparent")
-        content.pack(fill="both", expand=True, padx=40, pady=(0, 30))
+        content.pack(fill="both", expand=True, padx=44, pady=(0, 36))
         
         # Overview card
         overview_card = GlowingCard(content)
@@ -1129,7 +1339,7 @@ The result is a system that doesn't resemble a password manager in its raw form 
             ctk.CTkLabel(
                 inner,
                 text=icon,
-                font=("Segoe UI Emoji", 24),
+                font=("Segoe UI Emoji", 22),
                 text_color=Colors.ACCENT_PRIMARY
             ).pack(anchor="w")
             
@@ -1221,10 +1431,9 @@ The result is a system that doesn't resemble a password manager in its raw form 
         )
         self.status_label.pack(side="left")
         
-        # Right side info
         ctk.CTkLabel(
             status_content,
-            text="Fractured Key v2.0 | AES-256-GCM + Argon2id + SSS",
+            text="Fractured Key v2.0 · AES-256-GCM · Argon2id · SSS",
             font=Fonts.CAPTION,
             text_color=Colors.TEXT_MUTED
         ).pack(side="right")
@@ -1241,16 +1450,18 @@ The result is a system that doesn't resemble a password manager in its raw form 
         # Show selected tab
         self.tabs[tab_id].pack(fill="both", expand=True)
         
-        # Update navigation styling
+        # Update navigation styling (blue accent for active)
         for btn_id, btn_info in self.nav_buttons.items():
             if btn_id == tab_id:
                 btn_info["frame"].configure(fg_color=Colors.BG_LIGHT)
                 btn_info["icon"].configure(text_color=Colors.ACCENT_PRIMARY)
                 btn_info["title"].configure(text_color=Colors.ACCENT_PRIMARY)
+                btn_info["subtitle"].configure(text_color=Colors.TEXT_SECONDARY)
             else:
                 btn_info["frame"].configure(fg_color="transparent")
                 btn_info["icon"].configure(text_color=Colors.TEXT_SECONDARY)
                 btn_info["title"].configure(text_color=Colors.TEXT_PRIMARY)
+                btn_info["subtitle"].configure(text_color=Colors.TEXT_MUTED)
                 
     def _update_status(self, message, status_type="info"):
         """Update status bar"""
@@ -1431,10 +1642,12 @@ The result is a system that doesn't resemble a password manager in its raw form 
         return bytes(header) + share_bytes + packaged_cipher
         
     def _encryption_finished(self):
-        """Called when encryption is finished"""
+        """Called when encryption is finished — clear passwords so they are not shown."""
         self.encrypt_progress.stop_animation()
         self.encrypt_btn.configure(state="normal")
         self._update_status("Encryption completed", "success")
+        self.encrypt_password_entry.delete(0, "end")
+        self.encrypt_master_entry.delete(0, "end")
         
     # ═══════════════════════════════════════════════════════════════════════════
     # DECRYPTION LOGIC
@@ -1597,10 +1810,13 @@ The result is a system that doesn't resemble a password manager in its raw form 
         }
         
     def _decryption_finished(self):
-        """Called when decryption is finished"""
+        """Called when decryption is finished — clear password and selected images."""
         self.decrypt_progress.stop_animation()
         self.decrypt_btn.configure(state="normal")
         self._update_status("Decryption completed", "success")
+        self.decrypt_master_entry.delete(0, "end")
+        self.selected_images = []
+        self._update_image_list()
         
     # ═══════════════════════════════════════════════════════════════════════════
     # MANUAL DECRYPTION LOGIC
@@ -1663,6 +1879,10 @@ The result is a system that doesn't resemble a password manager in its raw form 
         except Exception as e:
             self._log_output(self.manual_output, f"Manual decryption failed: {str(e)}", "error")
             self._update_status("Manual decryption failed", "error")
+        finally:
+            # Clear file path and password so they are not left visible
+            self.manual_file_entry.delete(0, "end")
+            self.manual_master_entry.delete(0, "end")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
